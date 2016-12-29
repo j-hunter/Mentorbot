@@ -18,13 +18,13 @@ public class RobotMap {
 
 	//Drive Addresses
 	public static final int FRDriveAddr = 1;
-	public static final int FLDriveAddr = 2;
+	public static final int FLDriveAddr = 6;
 	public static final int RRDriveAddr = 3;
 	public static final int RLDriveAddr = 4;
 	
 	//Angle addresses
 	public static final int FRAngleAddr = 5;
-	public static final int FLAngleAddr = 5;
+	public static final int FLAngleAddr = 2;
 	public static final int RRAngleAddr = 5;
 	public static final int RLAngleAddr = 5;
 }
