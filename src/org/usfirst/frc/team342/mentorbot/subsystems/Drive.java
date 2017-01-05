@@ -70,7 +70,7 @@ public class Drive extends Subsystem {
 				CANTalon FLA, CANTalon RRA, CANTalon RLA,
 				int FRR, int FLR, int RRR, int RLR){
 			
-			this.SwerveDrive(FRD, FLD, RRD, RLD
+			this(FRD, FLD, RRD, RLD,
 					FRA, FLA, RRA, RLA,
 					new DigitalInput(FRR),
 					new DigitalInput(FLR),
@@ -83,7 +83,7 @@ public class Drive extends Subsystem {
 				CANTalon FLA, CANTalon RRA, CANTalon RLA,
 				int FRR, int FLR, int RRR, int RLR,
 				int encCountSize ){
-			this.SwerveDrive(FRD, FLD, RRD, RLD
+			this(FRD, FLD, RRD, RLD,
 					FRA, FLA, RRA, RLA,
 					new DigitalInput(FRR),
 					new DigitalInput(FLR),
@@ -96,7 +96,8 @@ public class Drive extends Subsystem {
 				CANTalon FLA, CANTalon RRA, CANTalon RLA,
 				DigitalInput FRR, DigitalInput FLR,
 				DigitalInput RRR, DigitalInput RLR){
-			this.SwerveDrive(FRD, FLD, RRD, RLD
+			
+			this(FRD, FLD, RRD, RLD,
 					FRA, FLA, RRA, RLA,
 					FRR, FLR, RRR, RLR, 4096);
 
@@ -183,7 +184,7 @@ public class Drive extends Subsystem {
 		RLAngle = new CANTalon(RobotMap.RLAngleAddr);
 		
 		sDrive = new SwerveDrive(FRDrive, FLDrive, RRDrive,
-				RLDrive, FRAngle, FLAngle, RRAngle, RLAngle);
+				RLDrive, FRAngle, FLAngle, RRAngle, RLAngle,1,2,3,4);
 		
 		driveInit();
 	}
