@@ -4,7 +4,7 @@ package org.usfirst.frc.team342.mentorbot;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.communication.FRCNetworkCommunicationsLibrary;
+
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import org.usfirst.frc.team342.mentorbot.commands.ExampleCommand;
 import org.usfirst.frc.team342.mentorbot.subsystems.Drive;
@@ -104,7 +104,7 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
-        FRCNetworkCommunicationsLibrary.HALSetErrorData(Integer.toString(driveSystem.getEnc(Drive.DriveSide.FL))+"\n");
+       
     }
     
     /**
