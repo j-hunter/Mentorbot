@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 import org.usfirst.frc.team342.mentorbot.commands.ExampleCommand;
 import org.usfirst.frc.team342.mentorbot.commands.RefDrive;
+import org.usfirst.frc.team342.mentorbot.commands.RevWheel;
 import org.usfirst.frc.team342.mentorbot.subsystems.Drive;
 
 /**
@@ -42,12 +43,14 @@ public class OI {
 	
 	private Joystick joystick;
 	private Button refStart;
+	private Button revWheel;
 	public OI(Drive drive){
-		joystick = new Joystick(0);
-		refStart = new JoystickButton(joystick,0);
-		
+		joystick = new Joystick(RobotMap.JPORTNUM);
+		refStart = new JoystickButton(joystick,RobotMap.JREFSTART);
+		revWheel = new JoystickButton(joystick,RobotMap.JREVWHEEL);
 		
 		refStart.whenPressed(new RefDrive(drive));
+		revWheel.whenPressed(new RevWheel(drive, joystick));
 	}
 }
 

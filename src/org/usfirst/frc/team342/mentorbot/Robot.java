@@ -41,7 +41,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putData("Auto mode", chooser);
         
         driveSystem = new Drive();
-        oi = new OI(drivesystem);
+        oi = new OI(driveSystem);
     }
 	
 	/**

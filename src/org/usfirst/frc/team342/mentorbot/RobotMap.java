@@ -18,15 +18,25 @@ public class RobotMap {
 
 	//Drive Addresses
 	public static final int FRDriveAddr = 1;
-	public static final int FLDriveAddr = 6;
-	public static final int RRDriveAddr = 3;
-	public static final int RLDriveAddr = 4;
+	public static final int FLDriveAddr = 4;
+	public static final int RRDriveAddr = 2;
+	public static final int RLDriveAddr = 3;
 	
 	//Angle addresses
 	public static final int FRAngleAddr = 5;
-	public static final int FLAngleAddr = 2;
-	public static final int RRAngleAddr = 5;
-	public static final int RLAngleAddr = 5;
+	public static final int FLAngleAddr = 8;
+	public static final int RRAngleAddr = 6;
+	public static final int RLAngleAddr = 7;
+	
+	public static final int JPORTNUM = 0;
+	//Joystick buttons
+	public static final int JREFSTART = 7;
+	public static final int JREVWHEEL = 8;
+	public static final int JSELFR = 10;
+	public static final int JSELFL = 9;
+	public static final int JSELRR = 12;
+	public static final int JSELRL = 11;
+	
 	
 	
 }

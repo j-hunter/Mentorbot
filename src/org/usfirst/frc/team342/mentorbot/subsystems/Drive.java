@@ -6,10 +6,11 @@ import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drive extends Subsystem {
 	public enum DriveSide {
-		FR(1), FL(2), RR(3), RL(4);
+		FR(1), FL(2), RR(3), RL(4), None(0);
 
 		public int value;
 
@@ -62,8 +63,14 @@ public class Drive extends Subsystem {
 		private double FLActual;
 		private double RRActual;
 		private double RLActual;
+		
+		//Encoder data
+		private int encPerWheelRot;
+		private int encPerEncRot;
 
 		private int initLevel;
+		
+		private boolean[] angSwitching = new boolean[4];
 
 		public SwerveDrive(CANTalon FRD, CANTalon FLD, CANTalon RRD, CANTalon RLD, CANTalon FRA, CANTalon FLA,
 				CANTalon RRA, CANTalon RLA, int FRR, int FLR, int RRR, int RLR) {
@@ -89,6 +96,7 @@ public class Drive extends Subsystem {
 				CANTalon RRA, CANTalon RLA, DigitalInput FRR, DigitalInput FLR, DigitalInput RRR, DigitalInput RLR,
 				int encCountSize) {
 
+			
 			FRDrive = FRD;
 			FLDrive = FLD;
 			RRDrive = RRD;
@@ -105,6 +113,13 @@ public class Drive extends Subsystem {
 			RLRef = RLR;
 
 			initLevel = 0;
+			
+			for(boolean angSw : angSwitching){
+				angSw = false;
+			}
+			
+			encPerWheelRot = DriveConstants.ENCPERWHEEL;
+			encPerEncRot = DriveConstants.ENCCOUNT;
 		}
 
 		public boolean startInit() {
@@ -126,6 +141,17 @@ public class Drive extends Subsystem {
 			FLAngle.reverseSensor(DriveConstants.FLEncReverse);
 			RRAngle.reverseSensor(DriveConstants.RREncReverse);
 			RLAngle.reverseSensor(DriveConstants.RLEncReverse);
+			
+			FRAngle.setEncPosition(Math.floorMod(FRAngle.getEncPosition() , encPerWheelRot));
+			FLAngle.setEncPosition(Math.floorMod(FLAngle.getEncPosition() , encPerWheelRot));
+			RRAngle.setEncPosition(Math.floorMod(RRAngle.getEncPosition() , encPerWheelRot));
+			RLAngle.setEncPosition(Math.floorMod(RLAngle.getEncPosition() , encPerWheelRot));
+			
+			FRAngle.enable();
+			FLAngle.enable();
+			RRAngle.enable();
+			RLAngle.enable();
+			
 		}
 
 		private void doInit(){
@@ -136,7 +162,7 @@ public class Drive extends Subsystem {
 			double rlrefpos = DriveConstants.RLRefPos;
 			double reftollerance = DriveConstants.refTollerance;
 
-			
+			SmartDashboard.putInt("InitLevel", initLevel);
 			switch (initLevel){
 			case 0:
 				//do nothing, explicitly
@@ -160,7 +186,7 @@ public class Drive extends Subsystem {
 				RRAngle.set(rrrefpos);
 				RLAngle.set(rlrefpos);
 				
-				initLevel = 3;
+				initLevel = 4;
 				break;
 				
 			case 3:
@@ -174,6 +200,10 @@ public class Drive extends Subsystem {
 				break;
 				
 			case 4:
+				FRAngle.disable();
+				FLAngle.disable();
+				RRAngle.disable();
+				RLAngle.disable();
 				initLevel = 10;
 				break;
 			}
@@ -188,8 +218,30 @@ public class Drive extends Subsystem {
 
 		}
 
-		public void flipWheel(DriveSide side) {
+		public boolean flipWheel(DriveSide side) {
 			// TODO : Find best way to simply flip a wheel
+			CANTalon talon = decSideAng(side);
+			double tempPos;
+			boolean answer = false;
+			SmartDashboard.putInt("TalonAddr", talon.getDeviceID());
+			if (angSwitching[side.value - 1])
+			{
+				SmartDashboard.putDouble("RevWheelMovingPos", talon.getPosition());
+				answer = (Math.abs(talon.getClosedLoopError()) < DriveConstants.ENCERROR);
+				if (answer)
+					talon.disable();
+			}
+			else
+			{
+				SmartDashboard.putString("RevStart", "InFalse");
+				talon.enable();
+				angSwitching[side.value-1] = true;
+				tempPos = talon.getPosition();
+				talon.setEncPosition(talon.getEncPosition() + (encPerWheelRot / 2));
+				SmartDashboard.putDouble("RevWheelInitPos", tempPos);
+				talon.set(tempPos + 0.5);
+			}
+			return answer;
 		}
 
 		public int getEnc(DriveSide side) {
@@ -207,6 +259,26 @@ public class Drive extends Subsystem {
 			}
 
 			return value;
+		}
+		private CANTalon decSideAng(DriveSide side)
+		{
+			CANTalon answer = null;
+			switch (side)
+			{
+			case FR:
+				answer = FRAngle;
+				break;
+			case FL:
+				answer = FLAngle;
+				break;
+			case RR:
+				answer = RRAngle;
+				break;
+			case RL:
+				answer = RLAngle;
+				break;
+			}
+			return answer;
 		}
 
 	}
@@ -274,6 +346,10 @@ public class Drive extends Subsystem {
 	
 	public boolean refSwerve(){
 		return sDrive.startInit();
+	}
+	
+	public boolean revWheel(DriveSide side){
+		return sDrive.flipWheel(side);
 	}
 
 	@Override
