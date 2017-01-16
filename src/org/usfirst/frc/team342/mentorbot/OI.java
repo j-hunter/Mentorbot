@@ -1,7 +1,12 @@
 package org.usfirst.frc.team342.mentorbot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+
 import org.usfirst.frc.team342.mentorbot.commands.ExampleCommand;
+import org.usfirst.frc.team342.mentorbot.commands.RefDrive;
+import org.usfirst.frc.team342.mentorbot.subsystems.Drive;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -34,5 +39,15 @@ public class OI {
     // Start the command when the button is released  and let it run the command
     // until it is finished as determined by it's isFinished method.
     // button.whenReleased(new ExampleCommand());
+	
+	private Joystick joystick;
+	private Button refStart;
+	public OI(Drive drive){
+		joystick = new Joystick(0);
+		refStart = new JoystickButton(joystick,0);
+		
+		
+		refStart.whenPressed(new RefDrive(drive));
+	}
 }
 

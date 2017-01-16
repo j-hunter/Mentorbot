@@ -113,7 +113,7 @@ public class Drive extends Subsystem {
 			if (initLevel == 0)
 				initLevel = 1;
 			doInit();
-			return initLevel > 10;
+			return initLevel >= 10;
 		}
 
 		private void commonInit() {
@@ -171,6 +171,10 @@ public class Drive extends Subsystem {
 						Math.abs(RRActual - rrrefpos) < reftollerance &&
 						Math.abs(RLActual - rlrefpos) < reftollerance)
 					initLevel = 4;
+				break;
+				
+			case 4:
+				initLevel = 10;
 				break;
 			}
 		}
@@ -266,6 +270,10 @@ public class Drive extends Subsystem {
 
 	public boolean checkReference(int ID) {
 		return true;
+	}
+	
+	public boolean refSwerve(){
+		return sDrive.startInit();
 	}
 
 	@Override
