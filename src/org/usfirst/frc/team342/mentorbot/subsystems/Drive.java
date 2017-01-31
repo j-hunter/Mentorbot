@@ -63,13 +63,13 @@ public class Drive extends Subsystem {
 		private double FLActual;
 		private double RRActual;
 		private double RLActual;
-		
-		//Encoder data
+
+		// Encoder data
 		private int encPerWheelRot;
 		private int encPerEncRot;
 
 		private int initLevel;
-		
+
 		private boolean[] angSwitching = new boolean[4];
 
 		public SwerveDrive(CANTalon FRD, CANTalon FLD, CANTalon RRD, CANTalon RLD, CANTalon FRA, CANTalon FLA,
@@ -96,7 +96,6 @@ public class Drive extends Subsystem {
 				CANTalon RRA, CANTalon RLA, DigitalInput FRR, DigitalInput FLR, DigitalInput RRR, DigitalInput RLR,
 				int encCountSize) {
 
-			
 			FRDrive = FRD;
 			FLDrive = FLD;
 			RRDrive = RRD;
@@ -113,11 +112,11 @@ public class Drive extends Subsystem {
 			RLRef = RLR;
 
 			initLevel = 0;
-			
-			for(boolean angSw : angSwitching){
+
+			for (boolean angSw : angSwitching) {
 				angSw = false;
 			}
-			
+
 			encPerWheelRot = DriveConstants.ENCPERWHEEL;
 			encPerEncRot = DriveConstants.ENCCOUNT;
 		}
@@ -125,12 +124,12 @@ public class Drive extends Subsystem {
 		public boolean startInit() {
 			// If we haven't started the reference process, start now; do init
 			// does nothing at initLevel 0
-			if (initLevel == 0)
+			if (initLevel == 0 || initLevel == 10)
 				initLevel = 1;
 			doInit();
 			return initLevel >= 10;
 		}
-
+	
 		private void commonInit() {
 			FRAngle.changeControlMode(CANTalon.TalonControlMode.Position);
 			FLAngle.changeControlMode(CANTalon.TalonControlMode.Position);
@@ -142,80 +141,171 @@ public class Drive extends Subsystem {
 			RRAngle.reverseSensor(DriveConstants.RREncReverse);
 			RLAngle.reverseSensor(DriveConstants.RLEncReverse);
 			
-			FRAngle.setEncPosition(Math.floorMod(FRAngle.getEncPosition() , encPerWheelRot));
-			FLAngle.setEncPosition(Math.floorMod(FLAngle.getEncPosition() , encPerWheelRot));
-			RRAngle.setEncPosition(Math.floorMod(RRAngle.getEncPosition() , encPerWheelRot));
-			RLAngle.setEncPosition(Math.floorMod(RLAngle.getEncPosition() , encPerWheelRot));
+			FRAngle.reverseOutput(DriveConstants.FRMotReverse);
+			FLAngle.reverseOutput(DriveConstants.FLMotReverse);
+			RRAngle.reverseOutput(DriveConstants.RRMotReverse);
+			RLAngle.reverseOutput(DriveConstants.RLMotReverse);
 			
+			/*
+			 * FRAngle.setPulseWidthPosition(Math.floorMod(FRAngle.
+			 * getPulseWidthPosition() , encPerWheelRot));
+			 * FLAngle.setPulseWidthPosition(Math.floorMod(FLAngle.
+			 * getPulseWidthPosition() , encPerWheelRot));
+			 * RRAngle.setPulseWidthPosition(Math.floorMod(RRAngle.
+			 * getPulseWidthPosition() , encPerWheelRot));
+			 * RLAngle.setPulseWidthPosition(Math.floorMod(RLAngle.
+			 * getPulseWidthPosition() , encPerWheelRot));
+			 * 
+			 * 
+			 */
+
+			FRAngle.setP(1);
+			FLAngle.setP(1);
+			RRAngle.setP(1);
+			RLAngle.setP(1);
+
 			FRAngle.enable();
 			FLAngle.enable();
 			RRAngle.enable();
 			RLAngle.enable();
-			
+
 		}
 
-		private void doInit(){
-			
-			double frrefpos = DriveConstants.FRRefPos;
-			double flrefpos = DriveConstants.FLRefPos;
-			double rrrefpos = DriveConstants.RRRefPos;
-			double rlrefpos = DriveConstants.RLRefPos;
-			double reftollerance = DriveConstants.refTollerance;
+		public void doInit() {
+
+			int absFR, absFL, absRR, absRL;
 
 			SmartDashboard.putInt("InitLevel", initLevel);
-			switch (initLevel){
+			switch (initLevel) {
 			case 0:
-				//do nothing, explicitly
+				// do nothing, explicitly
 				break;
 			case 1:
 				commonInit();
-				
+
 				FRAngle.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Absolute);
 				FLAngle.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Absolute);
 				RRAngle.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Absolute);
 				RLAngle.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Absolute);
-				
+
 				initLevel = 2;
 				break;
-				
-			case 2:
-				
 
-				FRAngle.set(frrefpos);
-				FLAngle.set(flrefpos);
-				RRAngle.set(rrrefpos);
-				RLAngle.set(rlrefpos);
-				
-				initLevel = 4;
+			case 2:
+				//
+				absFR = FRAngle.getPulseWidthPosition() % DriveConstants.ENCCOUNT;
+				absFL = FLAngle.getPulseWidthPosition();
+				absRR = RRAngle.getPulseWidthPosition();
+				absRL = RLAngle.getPulseWidthPosition();
+
+				FRAngle.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+				FLAngle.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+				RRAngle.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+				RLAngle.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+
+				FRAngle.setEncPosition(absFR + DriveConstants.FRAngOffset);
+				FLAngle.setEncPosition(absFL + DriveConstants.FLAngOffset);
+				RRAngle.setEncPosition(absRR + DriveConstants.RRAngOffset);
+				RLAngle.setEncPosition(absRL + DriveConstants.RLAngOffset);
+
+				initLevel = 3;
 				break;
-				
-			case 3:
+
+			case 3:// drive.setzero?
 				updateData();
 
-				if(Math.abs(FRActual - frrefpos) < reftollerance &&
-						Math.abs(FLActual - flrefpos) < reftollerance &&
-						Math.abs(RRActual - rrrefpos) < reftollerance &&
-						Math.abs(RLActual - rlrefpos) < reftollerance)
-					initLevel = 4;
+				initLevel = 4;
 				break;
-				
+
 			case 4:
-				FRAngle.disable();
-				FLAngle.disable();
-				RRAngle.disable();
-				RLAngle.disable();
+
 				initLevel = 10;
+
 				break;
 			}
 		}
 
 		public void updateData() {
-
+			
+			FRActual = FRAngle.getPosition();
+			FLActual = FLAngle.getPosition();
+			RRActual = RRAngle.getPosition();
+			RLActual = RLAngle.getPosition();
+			SmartDashboard.putDouble("FRAngle", FRActual);
 		}
 
 		public void set(double angle, double power) {
 			// TODO Auto-generated method stub
 
+			SmartDashboard.putDouble("angle", angle);
+			updateData();
+			setAngle(DriveSide.FR, angle);
+			setAngle(DriveSide.FL, angle);
+			setAngle(DriveSide.RR, angle);
+			setAngle(DriveSide.RL, angle);
+
+			setDriveVolt(power * 0.5);
+		}
+
+		private void resetEnc(DriveSide side) {
+			CANTalon talon = decSideAng(side);
+			int newEnc = 0;
+			switch (side) {
+			case FR:
+				newEnc = talon.getPulseWidthPosition() + DriveConstants.FRAngOffset;
+				break;
+			case FL:
+				newEnc = talon.getPulseWidthPosition() + DriveConstants.FLAngOffset;
+				break;
+			case RR:
+				newEnc = talon.getPulseWidthPosition() + DriveConstants.RRAngOffset;
+				break;
+			case RL:
+				newEnc = talon.getPulseWidthPosition() + DriveConstants.RLAngOffset;
+				break;
+			}
+			talon.setEncPosition(newEnc);
+
+		}
+
+		public void setAngle(DriveSide side, double angle) {
+			CANTalon talon = decSideAng(side);
+			double actual = 0.0;
+
+			switch (side) {
+			case FR:
+				actual = FRActual;
+				break;
+			case FL:
+				actual = FLActual;
+				break;
+			case RR:
+				actual = RRActual;
+				break;
+			case RL:
+				actual = RLActual;
+				break;
+			}
+			if (actual < 0.0 || actual > 1.0) {
+				resetEnc(side);
+			}
+			if (Math.abs(angle - actual) > 0.5) {
+				if (angle > actual) {
+
+					angle = angle + 1.0;
+				} else {
+					angle = angle - 1.0;
+				}
+
+			}
+			talon.set(angle);
+		}
+
+		public void setDriveVolt(double speed) {
+			FRDrive.set(speed);
+			FLDrive.set(speed);
+			RRDrive.set(speed);
+			RLDrive.set(speed);
 		}
 
 		public boolean flipWheel(DriveSide side) {
@@ -223,23 +313,22 @@ public class Drive extends Subsystem {
 			CANTalon talon = decSideAng(side);
 			double tempPos;
 			boolean answer = false;
-			SmartDashboard.putInt("TalonAddr", talon.getDeviceID());
-			if (angSwitching[side.value - 1])
-			{
+			SmartDashboard.putString("TalonAddr", Integer.toString(talon.getDeviceID()));
+			if (angSwitching[side.value - 1]) {
 				SmartDashboard.putDouble("RevWheelMovingPos", talon.getPosition());
 				answer = (Math.abs(talon.getClosedLoopError()) < DriveConstants.ENCERROR);
-				if (answer)
+				if (answer) {
 					talon.disable();
-			}
-			else
-			{
+					angSwitching[side.value - 1] = false;
+				}
+			} else {
 				SmartDashboard.putString("RevStart", "InFalse");
 				talon.enable();
-				angSwitching[side.value-1] = true;
+				angSwitching[side.value - 1] = true;
 				tempPos = talon.getPosition();
-				talon.setEncPosition(talon.getEncPosition() + (encPerWheelRot / 2));
+				talon.setPulseWidthPosition(talon.getPulseWidthPosition() + (encPerWheelRot / 2));
 				SmartDashboard.putDouble("RevWheelInitPos", tempPos);
-				talon.set(tempPos + 0.5);
+				talon.set(tempPos);
 			}
 			return answer;
 		}
@@ -260,11 +349,10 @@ public class Drive extends Subsystem {
 
 			return value;
 		}
-		private CANTalon decSideAng(DriveSide side)
-		{
+
+		public CANTalon decSideAng(DriveSide side) {
 			CANTalon answer = null;
-			switch (side)
-			{
+			switch (side) {
 			case FR:
 				answer = FRAngle;
 				break;
@@ -322,10 +410,48 @@ public class Drive extends Subsystem {
 	};
 
 	public void cartDrive(double xIn, double yIn) {
-		double angle = Math.atan2(yIn, yIn);
+		//double angle = Math.atan(yIn / xIn);
 		double power = Math.sqrt((yIn * yIn) + (xIn * xIn));
+		if (power > 0.1)
+			sDrive.set(calcAngle(xIn, yIn) / 360.0, power);
+		else
+			sDrive.setDriveVolt(0.0);
+	}
 
-		sDrive.set(angle, power);
+	public double calcAngle(double x, double y) {
+
+		double angle = 0.0;
+
+		angle = Math.atan(y / x);
+		angle = Math.toDegrees(angle);
+		if (Math.abs(x) > 0.001) {
+			if (x > 0.0) {
+
+				angle = angle + 90.0;
+
+			} else {
+
+				angle = angle + 270;
+			}
+		} else {
+			if (y < 0.0)
+				angle = 0;
+			else
+				angle = 180;
+		}
+		return angle;
+
+	}
+
+	public void singleDriveControlMode(DriveSide side, int mode) {
+		CANTalon talon = sDrive.decSideAng(side);
+
+	}
+
+	public void singleDrive(DriveSide side, double speed) {
+		CANTalon talon = sDrive.decSideAng(side);
+
+		talon.setControlMode(CANTalon.TalonControlMode.Voltage.value);
 	}
 
 	public void updateDriveData() {
@@ -343,12 +469,12 @@ public class Drive extends Subsystem {
 	public boolean checkReference(int ID) {
 		return true;
 	}
-	
-	public boolean refSwerve(){
+
+	public boolean refSwerve() {
 		return sDrive.startInit();
 	}
-	
-	public boolean revWheel(DriveSide side){
+
+	public boolean revWheel(DriveSide side) {
 		return sDrive.flipWheel(side);
 	}
 

@@ -11,6 +11,9 @@ public class RefDrive extends Command {
 		drive = rDrive;
 	}
 
+	protected void initialize(){
+		
+	}
 	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub

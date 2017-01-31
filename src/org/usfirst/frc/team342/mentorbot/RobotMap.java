@@ -37,6 +37,11 @@ public class RobotMap {
 	public static final int JSELRR = 12;
 	public static final int JSELRL = 11;
 	
+	//Camera
+	//PWM ports
+	public static final int CAM_AzPin = 1;
+	public static final int CAM_ElePin = 2;
+	
 	
 	
 }

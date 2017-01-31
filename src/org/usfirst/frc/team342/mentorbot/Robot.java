@@ -2,11 +2,16 @@
 package org.usfirst.frc.team342.mentorbot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+
+import org.usfirst.frc.team342.mentorbot.commands.CameraAim;
+import org.usfirst.frc.team342.mentorbot.commands.DriveWithJoystick;
 import org.usfirst.frc.team342.mentorbot.commands.ExampleCommand;
+import org.usfirst.frc.team342.mentorbot.subsystems.CameraPod;
 import org.usfirst.frc.team342.mentorbot.subsystems.Drive;
 import org.usfirst.frc.team342.mentorbot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -25,9 +30,14 @@ public class Robot extends IterativeRobot {
 	public static OI oi;
 	
 	private Drive driveSystem;
-
+	public CameraPod camera;
+	public Joystick joystick;
+	
     Command autonomousCommand;
     SendableChooser chooser;
+    
+    CameraAim camCom;
+    DriveWithJoystick driver;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -40,7 +50,9 @@ public class Robot extends IterativeRobot {
 //        chooser.addObject("My Auto", new MyAutoCommand());
         SmartDashboard.putData("Auto mode", chooser);
         
+        camera = new CameraPod();
         driveSystem = new Drive();
+        joystick = new Joystick(RobotMap.JPORTNUM);
         oi = new OI(driveSystem);
     }
 	
@@ -96,7 +108,13 @@ public class Robot extends IterativeRobot {
         // teleop starts running. If you want the autonomous to 
         // continue until interrupted by another command, remove
         // this line or comment it out.
+    	
         if (autonomousCommand != null) autonomousCommand.cancel();
+        //camCom = new CameraAim(camera,joystick);
+        //camCom.start();
+        driver = new DriveWithJoystick(driveSystem, joystick);
+        driver.start();
+        
     }
 
     /**
