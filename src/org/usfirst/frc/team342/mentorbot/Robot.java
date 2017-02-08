@@ -112,6 +112,9 @@ public class Robot extends IterativeRobot {
         if (autonomousCommand != null) autonomousCommand.cancel();
         //camCom = new CameraAim(camera,joystick);
         //camCom.start();
+        while(!driveSystem.refSwerve())
+        	SmartDashboard.putString("teleInitRef", "Running");
+        SmartDashboard.putString("teleInitRef", "Done");
         driver = new DriveWithJoystick(driveSystem, joystick);
         driver.start();
         

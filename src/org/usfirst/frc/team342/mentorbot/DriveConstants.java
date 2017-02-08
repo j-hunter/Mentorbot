@@ -10,13 +10,13 @@ public class DriveConstants {
 	public static final boolean FREncReverse = true;
 	public static final boolean FLEncReverse = true;
 	public static final boolean RREncReverse = true;
-	public static final boolean RLEncReverse = false;
+	public static final boolean RLEncReverse = true;
 	
 	
 	public static final boolean FRMotReverse = true;
 	public static final boolean FLMotReverse = true;
 	public static final boolean RRMotReverse = true;
-	public static final boolean RLMotReverse = true;
+	public static final boolean RLMotReverse = false;
 	
 	public static final double refTollerance = 0.5;
 	
@@ -25,10 +25,10 @@ public class DriveConstants {
 	public static final double RRRefPos = 0.0;
 	public static final double RLRefPos = 0.0;
 	
-	public static final int FRAngOffset = 0;
-	public static final int FLAngOffset = 130;
-	public static final int RRAngOffset = 20;
-	public static final int RLAngOffset = 0;
+	public static final int FRAngOffset = 355;
+	public static final int FLAngOffset = 188;
+	public static final int RRAngOffset = 31;
+	public static final int RLAngOffset = 2041;
 	
 	
 	public static final int ENCCOUNT = 4096;

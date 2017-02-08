@@ -24,8 +24,8 @@ public class RobotMap {
 	
 	//Angle addresses
 	public static final int FRAngleAddr = 5;
-	public static final int FLAngleAddr = 8;
-	public static final int RRAngleAddr = 6;
+	public static final int FLAngleAddr = 6;
+	public static final int RRAngleAddr = 8;
 	public static final int RLAngleAddr = 7;
 	
 	public static final int JPORTNUM = 0;
