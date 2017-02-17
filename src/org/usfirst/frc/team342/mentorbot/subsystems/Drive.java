@@ -24,7 +24,6 @@ public class Drive extends Subsystem {
 
 	public class SwerveDrive {
 
-		
 		// Drive Talons
 		private final CANTalon FRDrive;
 		private final CANTalon FLDrive;
@@ -132,7 +131,7 @@ public class Drive extends Subsystem {
 			doInit();
 			return initLevel >= 10;
 		}
-	
+
 		private void commonInit() {
 			FRAngle.changeControlMode(CANTalon.TalonControlMode.Position);
 			FLAngle.changeControlMode(CANTalon.TalonControlMode.Position);
@@ -143,12 +142,12 @@ public class Drive extends Subsystem {
 			FLAngle.reverseSensor(DriveConstants.FLEncReverse);
 			RRAngle.reverseSensor(DriveConstants.RREncReverse);
 			RLAngle.reverseSensor(DriveConstants.RLEncReverse);
-			
+
 			FRAngle.reverseOutput(DriveConstants.FRMotReverse);
 			FLAngle.reverseOutput(DriveConstants.FLMotReverse);
 			RRAngle.reverseOutput(DriveConstants.RRMotReverse);
 			RLAngle.reverseOutput(DriveConstants.RLMotReverse);
-			
+
 			/*
 			 * FRAngle.setPulseWidthPosition(Math.floorMod(FRAngle.
 			 * getPulseWidthPosition() , encPerWheelRot));
@@ -166,7 +165,7 @@ public class Drive extends Subsystem {
 			FLAngle.setP(1);
 			RRAngle.setP(1);
 			RLAngle.setP(1);
-			
+
 			FRAngle.setD(0);
 
 			FRAngle.enable();
@@ -190,41 +189,52 @@ public class Drive extends Subsystem {
 				FLAngle.disableControl();
 				RRAngle.disableControl();
 				RLAngle.disableControl();
-				
+
 				commonInit();
 
 				/*
-				FRAngle.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Absolute);
-				FLAngle.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Absolute);
-				RRAngle.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Absolute);
-				RLAngle.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Absolute);
-				*/
+				 * FRAngle.setFeedbackDevice(FeedbackDevice.
+				 * CtreMagEncoder_Absolute);
+				 * FLAngle.setFeedbackDevice(FeedbackDevice.
+				 * CtreMagEncoder_Absolute);
+				 * RRAngle.setFeedbackDevice(FeedbackDevice.
+				 * CtreMagEncoder_Absolute);
+				 * RLAngle.setFeedbackDevice(FeedbackDevice.
+				 * CtreMagEncoder_Absolute);
+				 */
 				initLevel = 2;
 				break;
 
 			case 2:
 				//
 				/*
-				absFR = FRAngle.getPulseWidthPosition() % DriveConstants.ENCCOUNT;
-				absFL = FLAngle.getPulseWidthPosition();
-				absRR = RRAngle.getPulseWidthPosition();
-				absRL = RLAngle.getPulseWidthPosition();
-				*/
+				 * absFR = FRAngle.getPulseWidthPosition() %
+				 * DriveConstants.ENCCOUNT; absFL =
+				 * FLAngle.getPulseWidthPosition(); absRR =
+				 * RRAngle.getPulseWidthPosition(); absRL =
+				 * RLAngle.getPulseWidthPosition();
+				 */
 				FRAngle.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 				FLAngle.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 				RRAngle.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 				RLAngle.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 				/*
-				FRAngle.setEncPosition(absFR + DriveConstants.FRAngOffset);
-				FLAngle.setEncPosition(absFL + DriveConstants.FLAngOffset);
-				RRAngle.setEncPosition(absRR + DriveConstants.RRAngOffset);
-				RLAngle.setEncPosition(absRL + DriveConstants.RLAngOffset);
-				*/
+				 * FRAngle.setEncPosition(absFR + DriveConstants.FRAngOffset);
+				 * FLAngle.setEncPosition(absFL + DriveConstants.FLAngOffset);
+				 * RRAngle.setEncPosition(absRR + DriveConstants.RRAngOffset);
+				 * RLAngle.setEncPosition(absRL + DriveConstants.RLAngOffset);
+				 */
 				resetEnc(DriveSide.FR);
-				//resetEnc(DriveSide.FL);
+				// resetEnc(DriveSide.FL);
 				resetEnc(DriveSide.RR);
 				resetEnc(DriveSide.RL);
 				resetEnc(DriveSide.FL);
+				
+				FRAngle.setAllowableClosedLoopErr(10);
+				FLAngle.setAllowableClosedLoopErr(10);
+				RRAngle.setAllowableClosedLoopErr(10);
+				RLAngle.setAllowableClosedLoopErr(10);
+				
 				initLevel = 3;
 				break;
 
@@ -235,7 +245,7 @@ public class Drive extends Subsystem {
 				FLAngle.enableControl();
 				RRAngle.enableControl();
 				RLAngle.enableControl();
-				
+
 				initLevel = 4;
 				break;
 
@@ -248,12 +258,12 @@ public class Drive extends Subsystem {
 		}
 
 		public void updateData() {
-			
+
 			FRActual = FRAngle.getPosition();
 			FLActual = FLAngle.getPosition();
 			RRActual = RRAngle.getPosition();
 			RLActual = RLAngle.getPosition();
-			SmartDashboard.putDouble("FRAngle", FRActual);
+			SmartDashboard.putDouble("FRAngle", FLActual);
 		}
 
 		public void set(double angle, double power) {
@@ -267,7 +277,7 @@ public class Drive extends Subsystem {
 			setAngle(DriveSide.RR, angle);
 			setAngle(DriveSide.RL, angle);
 
-			setDriveVolt(power );//* 0.5);
+			setDriveVolt(power);// * 0.5);
 		}
 
 		private void resetEnc(DriveSide side) {
@@ -277,7 +287,7 @@ public class Drive extends Subsystem {
 			int abs = 0;
 			switch (side) {
 			case FR:
-				offset =  DriveConstants.FRAngOffset;
+				offset = DriveConstants.FRAngOffset;
 				break;
 			case FL:
 				offset = DriveConstants.FLAngOffset;
@@ -290,13 +300,12 @@ public class Drive extends Subsystem {
 				break;
 			}
 			abs = talon.getPulseWidthPosition();
-			if (abs >= 0){
+			if (abs >= 0) {
 				newEnc = (abs % 4096) + offset;
-			}else{
+			} else {
 				newEnc = (4096 + (-1 * (Math.abs(abs) % 4096))) + offset;
 			}
-				
-			
+
 			talon.setEncPosition(newEnc);
 			SmartDashboard.putString("HasReset", "Yes");
 			SmartDashboard.putInt("abs", abs);
@@ -324,16 +333,13 @@ public class Drive extends Subsystem {
 				break;
 			}
 			/*
-			if (actual < 0.0 || actual > 1.0) {
-				resetEnc(side);
-				updateData();
-			}
-			*/
-		
-			if (actual > 0.0){
+			 * if (actual < 0.0 || actual > 1.0) { resetEnc(side); updateData();
+			 * }
+			 */
+
+			if (actual > 0.0) {
 				angle = angle + Math.floor(actual);
-			
-			
+
 				if (angle < actual) {
 					if (Math.abs(actual - angle) < 0.5) {
 						angle = angle;
@@ -346,15 +352,14 @@ public class Drive extends Subsystem {
 					} else {
 						angle = (angle - 1.0);
 					}
-				
+
 				}
-			}
-			else
-			{
+			} else {
 				angle = 1.0 - angle;
 				angle = angle * -1.0;
-				angle = angle - Math.floor(Math.abs(actual));
-				
+				angle = angle + Math.ceil(actual);
+				// - Math.floor(Math.abs(actual));
+
 				if (angle < actual) {
 					if (Math.abs(actual - angle) < 0.5) {
 						angle = angle;
@@ -362,21 +367,27 @@ public class Drive extends Subsystem {
 						angle = (angle + 1.0);
 					}
 				} else {
-					if (Math.abs(angle - actual) < 0.5) {
+					if (Math.abs(actual - angle) < 0.5) {
 						angle = angle;
 					} else {
 						angle = (angle - 1.0);
 					}
-				
-				}
-				
-			}
-			
-			
 
-			
+				}
+
+			}
+
+			// Nick's ver
+			/*
+			 * if (actual > 0) { angle = angle + Math.floor(actual); } else {
+			 * angle = angle - 1; angle = angle + Math.ceil(actual); }
+			 * 
+			 * if (Math.abs(actual - angle) > 0.5) { if (angle > actual) { angle
+			 * -= 1; } else { angle += 1; } }
+			 */
+
 			SmartDashboard.putDouble("Target", angle);
-			
+
 			talon.set(angle);
 		}
 
@@ -428,8 +439,8 @@ public class Drive extends Subsystem {
 
 			return value;
 		}
-		
-		public double getRelPos(DriveSide side){
+
+		public double getRelPos(DriveSide side) {
 			double value = 0.0;
 			updateData();
 			switch (side) {
@@ -439,25 +450,23 @@ public class Drive extends Subsystem {
 			case FL:
 				value = FLActual;
 				break;
-			case RR:				
+			case RR:
 				value = RRActual;
 				break;
 			case RL:
 				value = RLActual;
 				break;
 			}
-			
-			if (value >= 0.0){
+
+			if (value >= 0.0) {
 				value = value - Math.floor(value);
-			}
-			else
-			{
+			} else {
 				value = value * -1.0;
 				value = value - Math.floor(value);
 				value = 1.0 - value;
-			
+
 			}
-			
+
 			return value;
 		}
 
@@ -487,108 +496,112 @@ public class Drive extends Subsystem {
 			setAngle(DriveSide.FL, 0.625);
 			setAngle(DriveSide.RR, 0.125);
 			setAngle(DriveSide.RL, 0.325);
-			//updateData();
-			
+			// updateData();
+
 			SmartDashboard.putString("rotReady", "Ready");
-			
-			if (Math.abs(getRelPos(DriveSide.FR) - 0.875) > 0.1){
+
+			if (Math.abs(getRelPos(DriveSide.FR) - 0.875) > 0.15) {
 				ready = false;
 				SmartDashboard.putString("rotReady", "FR Not Ready, is" + getRelPos(DriveSide.FR));
 			}
-			
-			if (Math.abs(getRelPos(DriveSide.FL) - 0.625) > 0.1){
+
+			if (Math.abs(getRelPos(DriveSide.FL) - 0.625) > 0.15) {
 				ready = false;
-				SmartDashboard.putString("rotReady", "FL Not Ready");
+				SmartDashboard.putString("rotReady", "FL Not Ready, is" + getRelPos(DriveSide.FL));
 			}
-			
-			if (Math.abs(getRelPos(DriveSide.RR) - 0.125) > 0.1){
+
+			if (Math.abs(getRelPos(DriveSide.RR) - 0.125) > 0.15) {
 				ready = false;
-				SmartDashboard.putString("rotReady", "RR Not Ready");
+				SmartDashboard.putString("rotReady", "RR Not Ready, is" + getRelPos(DriveSide.RR));
 			}
-			
-			if (Math.abs(getRelPos(DriveSide.RL) - 0.325) > 0.1){
+
+			if (Math.abs(getRelPos(DriveSide.RL) - 0.325) > 0.15) {
 				ready = false;
 				SmartDashboard.putString("rotReady", "RL Not Ready, is" + getRelPos(DriveSide.RL));
 			}
-			if(ready){
+			if (ready) {
 				setDriveVolt(rot);
 			}
-			
-			
+
 		}
-		
-		public void swerve(double angle, double power, double rot){
-			//swerve const?
-			double rotMag = 0.3;
-			
+
+		public void swerve(double angle, double power, double rot) {
+			// swerve const?
+			double rotMag = 0.6 * power;
+
 			double frAngOff = 0.125;
 			double flAngOff = 0.875;
 			double rrAngOff = 0.375;
 			double rlAngOff = 0.625;
-			
+
 			double frAng, flAng, rrAng, rlAng;
 			double frMag, flMag, rrMag, rlMag;
 			double tempx, tempy;
 			double frx, fry, flx, fly, rrx, rry, rlx, rly;
-			//rad = turns *2 * Math.PI;
-			
-			/*// cosine is wrong!
-			setAngle(DriveSide.FR, angle + (Math.cos((angle - frAngOff) * 2.0 * Math.PI) * (rot * rotMag)));
-			FRDrive.set(power + (Math.cos((angle - frAngOff) * 2.0 * Math.PI) * powDiff));
-			
-			setAngle(DriveSide.FL, angle + (Math.cos((angle - flAngOff) * 2.0 * Math.PI) * (rot * rotMag)));
-			FLDrive.set(power + (Math.cos((angle - flAngOff) * 2.0 * Math.PI) * powDiff));
-			
-			setAngle(DriveSide.RR, angle + (Math.cos((angle - rrAngOff) * 2.0 * Math.PI) * (rot * rotMag)));
-			RRDrive.set(power + (Math.cos((angle - rrAngOff) * 2.0 * Math.PI) * powDiff));
-			
-			setAngle(DriveSide.RL, angle + (Math.cos((angle - rlAngOff) * 2.0 * Math.PI) * (rot * rotMag)));
-			RLDrive.set(power + (Math.cos((angle - rlAngOff) * 2.0 * Math.PI) * powDiff));
-			*/
-			///*
+			// rad = turns *2 * Math.PI;
+
+			/*
+			 * // cosine is wrong! setAngle(DriveSide.FR, angle +
+			 * (Math.cos((angle - frAngOff) * 2.0 * Math.PI) * (rot * rotMag)));
+			 * FRDrive.set(power + (Math.cos((angle - frAngOff) * 2.0 * Math.PI)
+			 * * powDiff));
+			 * 
+			 * setAngle(DriveSide.FL, angle + (Math.cos((angle - flAngOff) * 2.0
+			 * * Math.PI) * (rot * rotMag))); FLDrive.set(power +
+			 * (Math.cos((angle - flAngOff) * 2.0 * Math.PI) * powDiff));
+			 * 
+			 * setAngle(DriveSide.RR, angle + (Math.cos((angle - rrAngOff) * 2.0
+			 * * Math.PI) * (rot * rotMag))); RRDrive.set(power +
+			 * (Math.cos((angle - rrAngOff) * 2.0 * Math.PI) * powDiff));
+			 * 
+			 * setAngle(DriveSide.RL, angle + (Math.cos((angle - rlAngOff) * 2.0
+			 * * Math.PI) * (rot * rotMag))); RLDrive.set(power +
+			 * (Math.cos((angle - rlAngOff) * 2.0 * Math.PI) * powDiff));
+			 */
+			/// *
 			frAngOff = frAngOff * 2.0 * Math.PI;
 			flAngOff = flAngOff * 2.0 * Math.PI;
 			rrAngOff = rrAngOff * 2.0 * Math.PI;
 			rlAngOff = rlAngOff * 2.0 * Math.PI;
-			
+
 			tempx = Math.sin(angle * 2.0 * Math.PI) * power;
 			tempy = Math.cos(angle * 2.0 * Math.PI) * power;
-			
+
 			SmartDashboard.putString("inputVector", "Input vector X: " + tempx + ", Y: " + tempy);
-			SmartDashboard.putString("InputAngle", "Input angle = " + calcAngle( 1.0 * tempx,-1.0 * tempy) / 360.0);
-			
-			frx = Math.sin(frAngOff + (Math.PI / 2.0) ) * (rot * rotMag);
-			fry = Math.cos(frAngOff + (Math.PI / 2.0) ) * (rot * rotMag);
-			 
-			flx = Math.sin(flAngOff + (Math.PI / 2.0) ) * (rot * rotMag);
-			fly = Math.cos(flAngOff + (Math.PI / 2.0) ) * (rot * rotMag);
-			 
-			rrx = Math.sin(rrAngOff + (Math.PI / 2.0) ) * (rot * rotMag);
-			rry = Math.cos(rrAngOff + (Math.PI / 2.0) ) * (rot * rotMag);
-			 
-			rlx = Math.sin(rlAngOff + (Math.PI / 2.0) ) * (rot * rotMag);
-			rly = Math.cos(rlAngOff + (Math.PI / 2.0) ) * (rot * rotMag);
-			
+			SmartDashboard.putString("InputAngle", "Input angle = " + calcAngle(1.0 * tempx, -1.0 * tempy) / 360.0);
+
+			frx = Math.sin(frAngOff + (Math.PI / 2.0)) * (rot * rotMag);
+			fry = Math.cos(frAngOff + (Math.PI / 2.0)) * (rot * rotMag);
+
+			flx = Math.sin(flAngOff + (Math.PI / 2.0)) * (rot * rotMag);
+			fly = Math.cos(flAngOff + (Math.PI / 2.0)) * (rot * rotMag);
+
+			rrx = Math.sin(rrAngOff + (Math.PI / 2.0)) * (rot * rotMag);
+			rry = Math.cos(rrAngOff + (Math.PI / 2.0)) * (rot * rotMag);
+
+			rlx = Math.sin(rlAngOff + (Math.PI / 2.0)) * (rot * rotMag);
+			rly = Math.cos(rlAngOff + (Math.PI / 2.0)) * (rot * rotMag);
+
 			frAng = calcAngle(frx + tempx, -1.0 * (fry + tempy)) / 360.0;
 			flAng = calcAngle(flx + tempx, -1.0 * (fly + tempy)) / 360.0;
 			rrAng = calcAngle(rrx + tempx, -1.0 * (rry + tempy)) / 360.0;
 			rlAng = calcAngle(rlx + tempx, -1.0 * (rly + tempy)) / 360.0;
-			 
+
 			frMag = Math.sqrt(Math.pow(frx + tempx, 2) + Math.pow(fry + tempy, 2));
 			flMag = Math.sqrt(Math.pow(flx + tempx, 2) + Math.pow(fly + tempy, 2));
 			rrMag = Math.sqrt(Math.pow(rrx + tempx, 2) + Math.pow(rry + tempy, 2));
 			rlMag = Math.sqrt(Math.pow(rlx + tempx, 2) + Math.pow(rly + tempy, 2));
-			
+
 			setAngle(DriveSide.FR, frAng);
 			setAngle(DriveSide.FL, flAng);
 			setAngle(DriveSide.RR, rrAng);
 			setAngle(DriveSide.RL, rlAng);
-			
+
 			FRDrive.set(frMag);
 			FLDrive.set(flMag);
 			RRDrive.set(rrMag);
 			RLDrive.set(rlMag);
-		//*/
+			// */
 		}
 
 	}
@@ -623,88 +636,85 @@ public class Drive extends Subsystem {
 		RLAngle = new CANTalon(RobotMap.RLAngleAddr);
 
 		sDrive = new SwerveDrive(FRDrive, FLDrive, RRDrive, RLDrive, FRAngle, FLAngle, RRAngle, RLAngle, 1, 2, 3, 4);
-		
+
 		navx = new AHRS(SPI.Port.kMXP);
 		driveInit();
 	}
 
 	private void driveInit() {
 		// Set encoders
-		//Init gyro
+		// Init gyro
 		navx.setAngleAdjustment(0.0);
 
 	};
-	public void resetGyro(){
-		//navx.setAngleAdjustment(0.0);
+
+	public void resetGyro() {
+		// navx.setAngleAdjustment(0.0);
 		navx.reset();
 	}
 
 	public void cartDrive(double xIn, double yIn, double rotIn, boolean slow, boolean fieldO) {
-		//double angle = Math.atan(yIn / xIn);
+		// double angle = Math.atan(yIn / xIn);
 		sDrive.updateData();
 		rotIn = rotIn * -1.0;
 		double power = Math.sqrt((yIn * yIn) + (xIn * xIn));
 		double powCurve;
 		double rotCurve;
-		double gyroAngle = navx.getAngle();
-		double steerAngle = calcAngle(xIn,yIn) / 360.0;
-		
-		if(!fieldO)
+		double gyroAngle;
+		double steerAngle = calcAngle(xIn, yIn) / 360.0;
+
+		if (!fieldO)
 			resetGyro();
-		
+
+		gyroAngle = navx.getAngle();
+
 		SmartDashboard.putString("gyro1", "" + gyroAngle);
 		gyroAngle = (gyroAngle % 360) / 360.0;
 		SmartDashboard.putString("gyro2", "" + gyroAngle);
-		if(gyroAngle < 0.0){
+		if (gyroAngle < 0.0) {
 			gyroAngle = 1.0 + gyroAngle;
 		}
 		SmartDashboard.putString("gyro3", "" + gyroAngle);
-		if(fieldO){
+		if (fieldO) {
 			steerAngle = steerAngle - gyroAngle;
 			steerAngle = steerAngle % 1.0;
 		}
 		SmartDashboard.putString("gyro4", "" + steerAngle);
 		if (power > 1.0)
 			power = 1.0;
-		if(slow)
-			powCurve = (Math.pow(power,3) / 2) + 0.2;
+		if (slow)
+			powCurve = (Math.pow(power, 3) / 2) + 0.2;
 		else
 			powCurve = Math.pow(power, 3);
+
 		
-		
-		if(slow)
-			rotCurve = Math.pow(rotIn,3) / 2;
+		if (slow)
+			rotCurve = Math.pow(rotIn, 3) / 2;
 		else
-			rotCurve = Math.pow(rotIn,3);
-		
-		if (power > 0.1){
-			if(power > 0.3){
-				if(Math.abs(rotIn) > 0.2){
+			rotCurve = Math.pow(rotIn, 3);
+
+		SmartDashboard.putString("CalcedRot", "" + rotCurve);
+		if (power > 0.1) {
+			if (power > 0.3) {
+				if (Math.abs(rotIn) > 0.2) {
 					sDrive.swerve(steerAngle, powCurve, rotCurve * -1.0);
+				} else {
+					sDrive.set(steerAngle, powCurve);// - 0.25);
 				}
-				else
-				{
-					sDrive.set(steerAngle, powCurve );//- 0.25);
-				}
-			}
-			else
-			{
-				if(Math.abs(rotIn) > 0.4)
+			} else {
+				if (Math.abs(rotIn) > 0.4)
 					sDrive.spin(rotCurve);
 				else
 					sDrive.set(steerAngle, 0);
 			}
-		}
-		else{
-			if (Math.abs(rotIn) < 0.2){
+		} else {
+			if (Math.abs(rotIn) < 0.2) {
 				sDrive.setDriveVolt(0.0);
-			}
-			else
-			{
+			} else {
 				sDrive.spin(rotCurve);
 			}
 		}
-		SmartDashboard.putString("driveVolts", "Drive Voltage: " +FRDrive.getOutputVoltage());
+		SmartDashboard.putString("driveVolts", "Drive Voltage: " + FRDrive.getOutputVoltage());
 	}
 
 	public double calcAngle(double x, double y) {
