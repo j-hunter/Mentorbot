@@ -1,19 +1,20 @@
 
 package org.usfirst.frc.team342.mentorbot;
 
+import org.usfirst.frc.team342.mentorbot.commands.CameraAim;
+import org.usfirst.frc.team342.mentorbot.commands.DriveWithJoystick;
+import org.usfirst.frc.team342.mentorbot.commands.ExampleCommand;
+import org.usfirst.frc.team342.mentorbot.commands.ShootAlone;
+import org.usfirst.frc.team342.mentorbot.subsystems.CameraPod;
+import org.usfirst.frc.team342.mentorbot.subsystems.Drive;
+import org.usfirst.frc.team342.mentorbot.subsystems.ExampleSubsystem;
+import org.usfirst.frc.team342.mentorbot.subsystems.Shooter;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-
-import org.usfirst.frc.team342.mentorbot.commands.CameraAim;
-import org.usfirst.frc.team342.mentorbot.commands.DriveWithJoystick;
-import org.usfirst.frc.team342.mentorbot.commands.ExampleCommand;
-import org.usfirst.frc.team342.mentorbot.subsystems.CameraPod;
-import org.usfirst.frc.team342.mentorbot.subsystems.Drive;
-import org.usfirst.frc.team342.mentorbot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -34,26 +35,32 @@ public class Robot extends IterativeRobot {
 	public Joystick joystick;
 	
     Command autonomousCommand;
+    Command testCommand;
     SendableChooser chooser;
     
     CameraAim camCom;
     DriveWithJoystick driver;
+	private Shooter shooter;
 
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
     public void robotInit() {
-		
-        chooser = new SendableChooser();
-        chooser.addDefault("Default Auto", new ExampleCommand());
-//        chooser.addObject("My Auto", new MyAutoCommand());
-        SmartDashboard.putData("Auto mode", chooser);
-        
+	
         camera = new CameraPod();
         driveSystem = new Drive();
         joystick = new Joystick(RobotMap.JPORTNUM);
+        shooter = new Shooter();
         oi = new OI(driveSystem);
+        
+        chooser = new SendableChooser();
+        chooser.addDefault("Empty", new ExampleCommand());
+        chooser.addObject("Shooter Test", new ShootAlone(shooter, joystick));
+//        chooser.addObject("My Auto", new MyAutoCommand());
+        SmartDashboard.putData("Test Command", chooser);
+        
+
     }
 	
 	/**
@@ -79,7 +86,7 @@ public class Robot extends IterativeRobot {
 	 * or additional comparisons to the switch structure below with additional strings & commands.
 	 */
     public void autonomousInit() {
-        autonomousCommand = (Command) chooser.getSelected();
+        //autonomousCommand = (Command) chooser.getSelected();
         
 		/* String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
 		switch(autoSelected) {
@@ -117,6 +124,9 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putString("teleInitRef", "Done");
         driver = new DriveWithJoystick(driveSystem, joystick);
         driver.start();
+        testCommand = (Command) chooser.getSelected();
+        if(testCommand != null)
+        	testCommand.start();
         
     }
 
