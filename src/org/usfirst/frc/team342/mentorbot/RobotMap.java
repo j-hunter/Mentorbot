@@ -42,6 +42,10 @@ public class RobotMap {
 	public static final int CAM_AzPin = 1;
 	public static final int CAM_ElePin = 2;
 	
+	//Shooter
+	public static final int FrontShooter = 9;
+	public static final int BackShooter = 10;
+	
 	
 	
 }
