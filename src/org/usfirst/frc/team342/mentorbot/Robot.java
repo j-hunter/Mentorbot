@@ -135,6 +135,7 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
+        SmartDashboard.putString("trigger", "" + joystick.getRawAxis(2));
        
     }
     
