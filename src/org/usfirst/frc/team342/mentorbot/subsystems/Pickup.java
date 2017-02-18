@@ -2,11 +2,9 @@ package org.usfirst.frc.team342.mentorbot.subsystems;
 
 import org.usfirst.frc.team342.mentorbot.RobotMap;
 
-import com.ctre.CANTalon;
-import com.ctre.CANTalon.FeedbackDevice;
-import com.ctre.CANTalon.TalonControlMode;
-
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
+
 
 public class Pickup extends Subsystem {
 

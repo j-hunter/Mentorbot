@@ -45,6 +45,7 @@ public class RobotMap {
 	//Shooter
 	public static final int FrontShooter = 9;
 	public static final int BackShooter = 10;
+	public static final int Pickup = 4;
 	
 	
 	
