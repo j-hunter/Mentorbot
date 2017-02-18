@@ -62,7 +62,7 @@ public class RobotMap {
 	public static final int PowGear = 6;
 	
 	//Intake
-	public static final int PickupMotor = 4;
+	public static final int PickupMotor = 0;
 	public static final int PowPickup = 9;
 	
 	//clib

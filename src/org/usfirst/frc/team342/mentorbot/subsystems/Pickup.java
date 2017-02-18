@@ -16,7 +16,7 @@ public class Pickup extends Subsystem {
 	public Pickup (){
 		super();
 		
-		pickup = new Talon(RobotMap.Pickup);
+		pickup = new Talon(RobotMap.PickupMotor);
 		
 	}
 	
