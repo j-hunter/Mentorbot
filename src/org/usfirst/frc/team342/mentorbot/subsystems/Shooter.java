@@ -33,7 +33,7 @@ public class Shooter extends Subsystem {
 		
 		frontShooter = new CANTalon(RobotMap.FrontShooter);
 		backShooter = new CANTalon(RobotMap.BackShooter);
-		conveyor = new Talon(6);
+		conveyor = new Talon(RobotMap.Conveyor);
 		
 		setupTalons();
 	}

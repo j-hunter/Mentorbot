@@ -52,7 +52,8 @@ public class OI {
 	 * Slow - A 1
 	 */
 	private static int PICKUPBTN = 5;
-	public OI(Drive drive, Pickup pick, Joystick stick){
+	public 
+	OI(Drive drive, Pickup pick, Joystick stick){
 		joystick = stick;
 		pickup = pick;
 		
@@ -63,7 +64,7 @@ public class OI {
 		
 		//refStart.whenPressed(new RefDrive(drive));
 		//revWheel.whenPressed(new RevWheel(drive, joystick));
-		pickupBtn.whenPressed(new RunPickup(pickup));
+		pickupBtn.whileHeld(new RunPickup(pickup));
 	}
 }
 

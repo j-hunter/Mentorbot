@@ -12,7 +12,7 @@ public class Pickup extends Subsystem {
 	private Talon pickup;
 	
 	//constants
-	public static final double DEFAULTSPEED = 0.5;
+	public static final double DEFAULTSPEED = -0.5;
 	
 	
 	
