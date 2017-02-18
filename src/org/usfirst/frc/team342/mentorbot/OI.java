@@ -1,13 +1,12 @@
 package org.usfirst.frc.team342.mentorbot;
 
+import org.usfirst.frc.team342.mentorbot.commands.RunPickup;
+import org.usfirst.frc.team342.mentorbot.subsystems.Drive;
+import org.usfirst.frc.team342.mentorbot.subsystems.Pickup;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-
-import org.usfirst.frc.team342.mentorbot.commands.ExampleCommand;
-import org.usfirst.frc.team342.mentorbot.commands.RefDrive;
-import org.usfirst.frc.team342.mentorbot.commands.RevWheel;
-import org.usfirst.frc.team342.mentorbot.subsystems.Drive;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -42,15 +41,29 @@ public class OI {
     // button.whenReleased(new ExampleCommand());
 	
 	private Joystick joystick;
+	private Pickup pickup;
 	private Button refStart;
 	private Button revWheel;
-	public OI(Drive drive){
-		joystick = new Joystick(RobotMap.JPORTNUM);
-		refStart = new JoystickButton(joystick,RobotMap.JREFSTART);
-		revWheel = new JoystickButton(joystick,RobotMap.JREVWHEEL);
+	
+	private Button pickupBtn;
+	/* Pickup - L Bumper 5
+	 * Convey - R Bumper 6
+	 * Shoot R trigger
+	 * Slow - A 1
+	 */
+	private static int PICKUPBTN = 5;
+	public OI(Drive drive, Pickup pick, Joystick stick){
+		joystick = stick;
+		pickup = pick;
 		
-		refStart.whenPressed(new RefDrive(drive));
-		revWheel.whenPressed(new RevWheel(drive, joystick));
+		//refStart = new JoystickButton(joystick,RobotMap.JREFSTART);
+		//revWheel = new JoystickButton(joystick,RobotMap.JREVWHEEL);
+		pickupBtn = new JoystickButton(joystick,PICKUPBTN);
+		
+		
+		//refStart.whenPressed(new RefDrive(drive));
+		//revWheel.whenPressed(new RevWheel(drive, joystick));
+		pickupBtn.whenPressed(new RunPickup(pickup));
 	}
 }
 
