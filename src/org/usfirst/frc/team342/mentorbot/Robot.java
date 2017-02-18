@@ -2,10 +2,12 @@
 package org.usfirst.frc.team342.mentorbot;
 
 import org.usfirst.frc.team342.mentorbot.commands.CameraAim;
+import org.usfirst.frc.team342.mentorbot.commands.ClimbAlone;
 import org.usfirst.frc.team342.mentorbot.commands.DriveWithJoystick;
 import org.usfirst.frc.team342.mentorbot.commands.ExampleCommand;
 import org.usfirst.frc.team342.mentorbot.commands.ShootAlone;
 import org.usfirst.frc.team342.mentorbot.subsystems.CameraPod;
+import org.usfirst.frc.team342.mentorbot.subsystems.Climb;
 import org.usfirst.frc.team342.mentorbot.subsystems.Drive;
 import org.usfirst.frc.team342.mentorbot.subsystems.ExampleSubsystem;
 import org.usfirst.frc.team342.mentorbot.subsystems.Shooter;
@@ -41,6 +43,7 @@ public class Robot extends IterativeRobot {
     CameraAim camCom;
     DriveWithJoystick driver;
 	private Shooter shooter;
+	private Climb climber;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -52,11 +55,13 @@ public class Robot extends IterativeRobot {
         driveSystem = new Drive();
         joystick = new Joystick(RobotMap.JPORTNUM);
         shooter = new Shooter();
+        climber = new Climb();
         oi = new OI(driveSystem);
         
         chooser = new SendableChooser();
         chooser.addDefault("Empty", new ExampleCommand());
         chooser.addObject("Shooter Test", new ShootAlone(shooter, joystick));
+        chooser.addObject("Climber", new ClimbAlone(climber, joystick));
 //        chooser.addObject("My Auto", new MyAutoCommand());
         SmartDashboard.putData("Test Command", chooser);
         
