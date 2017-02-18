@@ -6,22 +6,26 @@ import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
 import com.ctre.CANTalon.TalonControlMode;
 
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Shooter extends Subsystem {
 
 	//Talons
 	private CANTalon frontShooter;
 	private CANTalon backShooter;
+	private Talon conveyor;
 	
 	//Talon Constants
-	private static final double ShootP = 1.0;
+	private static final double ShootP = 0.01;
 	private static final double ShootI = 0.0;
 	private static final double ShootD = 0.0;
-	private static final int ShootErr = 1;
+	private static final int ShootErr = 30;
 	
 	private double maxFrontSpeed = 2500.0;
 	private double maxBackSpeed = 4500.0;
+	private double conveyorSpeed = 0.5;
 	
 	
 	public Shooter (){
@@ -29,6 +33,7 @@ public class Shooter extends Subsystem {
 		
 		frontShooter = new CANTalon(RobotMap.FrontShooter);
 		backShooter = new CANTalon(RobotMap.BackShooter);
+		conveyor = new Talon(6);
 		
 		setupTalons();
 	}
@@ -36,17 +41,21 @@ public class Shooter extends Subsystem {
 	public void setupTalons(){
 		frontShooter.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 		frontShooter.changeControlMode(TalonControlMode.Speed);
+		frontShooter.set(0.0);
 		frontShooter.setP(ShootP);
 		frontShooter.setI(ShootI);
 		frontShooter.setD(ShootD);
 		frontShooter.setAllowableClosedLoopErr(ShootErr);
+		frontShooter.enableBrakeMode(false);
 		
 		backShooter.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 		backShooter.changeControlMode(TalonControlMode.Speed);
+		backShooter.set(0.0);
 		backShooter.setP(ShootP);
 		backShooter.setI(ShootI);
 		backShooter.setD(ShootD);
 		backShooter.setAllowableClosedLoopErr(ShootErr);
+		backShooter.enableBrakeMode(false);
 	}
 	
 	public void setMaxSpeeds(double front, double back){
@@ -55,8 +64,25 @@ public class Shooter extends Subsystem {
 	}
 	
 	public void set(double speed){
-		frontShooter.set(speed * maxFrontSpeed);
-		backShooter.set(speed * maxFrontSpeed);
+		double front = speed * maxFrontSpeed * -1.0;
+		double back = speed * maxBackSpeed * -1.0;
+		SmartDashboard.putString("ShootSet", "Front: " + front + " Back: " + back + " MaxF: " + maxFrontSpeed + " Back: " + maxBackSpeed);
+		frontShooter.set(front);
+		backShooter.set(back);
+	}
+	
+	public void convey(){
+		convey(true);
+	}
+	public void convey(boolean go){
+		if(go){
+			conveyor.set(conveyorSpeed );
+		} else {
+			conveyor.set(0.0);
+		}
+	}
+	public void constop(){
+		convey(false);
 	}
 	
 	@Override

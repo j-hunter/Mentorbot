@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ShootAlone extends Command {
+	private static final String FRONT_MAX_SPEED = "FrontMaxSpeed";
+	private static final String BACK_MAX_SPEED = "BackMaxSpeed";
 	Shooter shooter;
 	Joystick joystick;
 	
@@ -17,14 +19,13 @@ public class ShootAlone extends Command {
 	
 	public void initialize(){
 		double front, back;
-		front = SmartDashboard.getDouble("FrontMaxSpeed",2500.0);
-		back = SmartDashboard.getDouble("BackMaxSpeed", 4500.0);
-		
-		shooter.setMaxSpeeds(front, back);
+		SmartDashboard.putString(FRONT_MAX_SPEED, "" + 2500.0);
+		SmartDashboard.putString(BACK_MAX_SPEED, "" + 4500.0);
+
 	}
 
 	public void execute(){
-		shooter.set(joystick.getRawAxis(2));
+
 	}
 	
 	public void end(){
@@ -36,6 +37,14 @@ public class ShootAlone extends Command {
 	}
 	@Override
 	protected boolean isFinished() {
+		double front, back;
+		front = Double.parseDouble(SmartDashboard.getString(FRONT_MAX_SPEED));
+		back = Double.parseDouble(SmartDashboard.getString(BACK_MAX_SPEED));
+		
+		shooter.setMaxSpeeds(front, back);
+		shooter.set(joystick.getRawAxis(2));
+		shooter.convey(joystick.getRawButton(1));
+		SmartDashboard.putString("Trigger Input", "" + joystick.getRawAxis(2));
 		// TODO Auto-generated method stub
 		return false;
 	}

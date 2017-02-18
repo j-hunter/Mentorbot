@@ -5,6 +5,7 @@ import org.usfirst.frc.team342.mentorbot.RobotMap;
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
