@@ -65,10 +65,15 @@ public class RobotMap {
 	public static final int PowPickup = 9;
 	
 	//clib
+	public static final int ClimbMotor = 2;
 	public static final int PowClimb = 13;
 	
 	//PDP address
 	public static final int PDPADDR = 0;
+	
+	
+
+	
 	
 	
 }
