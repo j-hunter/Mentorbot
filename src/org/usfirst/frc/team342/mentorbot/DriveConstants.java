@@ -25,10 +25,17 @@ public class DriveConstants {
 	public static final double RRRefPos = 0.0;
 	public static final double RLRefPos = 0.0;
 	
-	public static final int FRAngOffset = 355;
-	public static final int FLAngOffset = 188;
-	public static final int RRAngOffset = 31;
-	public static final int RLAngOffset = 2000;
+	//Practice
+	//public static final int FRAngOffset = 355;
+	//public static final int FLAngOffset = 188;
+	//public static final int RRAngOffset = 31;
+	//public static final int RLAngOffset = 2000;
+	
+	//Competition
+	public static final int FRAngOffset = 2840;//1206;
+	public static final int FLAngOffset = 3980;
+	public static final int RRAngOffset = 3470;
+	public static final int RLAngOffset = 2230;
 	
 	
 	public static final int ENCCOUNT = 4096;

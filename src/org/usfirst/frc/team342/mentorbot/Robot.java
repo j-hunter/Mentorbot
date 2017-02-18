@@ -51,7 +51,7 @@ public class Robot extends IterativeRobot {
      */
     public void robotInit() {
 	
-        camera = new CameraPod();
+        //camera = new CameraPod();
         driveSystem = new Drive();
         joystick = new Joystick(RobotMap.JPORTNUM);
         shooter = new Shooter();
