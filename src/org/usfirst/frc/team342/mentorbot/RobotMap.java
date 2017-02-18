@@ -49,4 +49,8 @@ public class RobotMap {
 	
 	
 	
+	public static final int ClimbMotor = 0;
+	
+	
+	
 }
