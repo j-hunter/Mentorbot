@@ -10,6 +10,7 @@ import org.usfirst.frc.team342.mentorbot.subsystems.CameraPod;
 import org.usfirst.frc.team342.mentorbot.subsystems.Climb;
 import org.usfirst.frc.team342.mentorbot.subsystems.Drive;
 import org.usfirst.frc.team342.mentorbot.subsystems.ExampleSubsystem;
+import org.usfirst.frc.team342.mentorbot.subsystems.Pickup;
 import org.usfirst.frc.team342.mentorbot.subsystems.Shooter;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -44,6 +45,7 @@ public class Robot extends IterativeRobot {
     DriveWithJoystick driver;
 	private Shooter shooter;
 	private Climb climber;
+	private Pickup pickup;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -56,7 +58,8 @@ public class Robot extends IterativeRobot {
         joystick = new Joystick(RobotMap.JPORTNUM);
         shooter = new Shooter();
         climber = new Climb();
-        oi = new OI(driveSystem);
+        pickup = new Pickup();
+        oi = new OI(driveSystem, pickup, joystick);
         
         chooser = new SendableChooser();
         chooser.addDefault("Empty", new ExampleCommand());
@@ -132,6 +135,8 @@ public class Robot extends IterativeRobot {
         testCommand = (Command) chooser.getSelected();
         if(testCommand != null)
         	testCommand.start();
+        
+        
         
     }
 

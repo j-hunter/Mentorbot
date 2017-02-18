@@ -42,8 +42,8 @@ public class ShootAlone extends Command {
 		back = Double.parseDouble(SmartDashboard.getString(BACK_MAX_SPEED));
 		
 		shooter.setMaxSpeeds(front, back);
-		shooter.set(joystick.getRawAxis(2));
-		shooter.convey(joystick.getRawButton(1));
+		shooter.set(joystick.getRawAxis(3));
+		shooter.convey(joystick.getRawButton(6));
 		SmartDashboard.putString("Trigger Input", "" + joystick.getRawAxis(2));
 		// TODO Auto-generated method stub
 		return false;
