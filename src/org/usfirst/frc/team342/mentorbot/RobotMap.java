@@ -18,15 +18,23 @@ public class RobotMap {
 
 	//Drive Addresses
 	public static final int FRDriveAddr = 1;
+	public static final int PowFRD = 3;
 	public static final int FLDriveAddr = 4;
+	public static final int PowFLD = 12;
 	public static final int RRDriveAddr = 2;
+	public static final int PowRRD = 0;
 	public static final int RLDriveAddr = 3;
+	public static final int PowRLD = 15;
 	
 	//Angle addresses
 	public static final int FRAngleAddr = 5;
+	public static final int PowFRA = 7;
 	public static final int FLAngleAddr = 8;
+	public static final int PowFLA = 8;
 	public static final int RRAngleAddr = 6;
+	public static final int PowRRA = 4;
 	public static final int RLAngleAddr = 7;
+	public static final int PowRLA = 11;
 	
 	public static final int JPORTNUM = 0;
 	//Joystick buttons
@@ -44,9 +52,23 @@ public class RobotMap {
 	
 	//Shooter
 	public static final int FrontShooter = 9;
+	public static final int PowBkShoot = 2;
 	public static final int BackShooter = 10;
+	public static final int PowFrShoot = 1;
 	public static final int Conveyor = 1;
+	public static final int PowConvey = 14;
 	
+	//Gear
+	public static final int PowGear = 6;
+	
+	//Intake
+	public static final int PowPickup = 9;
+	
+	//clib
+	public static final int PowClimb = 13;
+	
+	//PDP address
+	public static final int PDPADDR = 0;
 	
 	
 	public static final int ClimbMotor = 0;
