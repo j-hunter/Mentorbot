@@ -21,11 +21,12 @@ public class Shooter extends Subsystem {
 	private static final double ShootP = 0.01;
 	private static final double ShootI = 0.0;
 	private static final double ShootD = 0.0;
+	private static final double ShootFg = 0.037;
 	private static final int ShootErr = 30;
 	
-	private double maxFrontSpeed = 2500.0;
-	private double maxBackSpeed = 4500.0;
-	private double conveyorSpeed = 0.5;
+	private double maxFrontSpeed = 1300.0; //2500.0;
+	private double maxBackSpeed = 30000; //4500.0;
+	private double conveyorSpeed = 0.60;
 	
 	
 	public Shooter (){
@@ -45,6 +46,7 @@ public class Shooter extends Subsystem {
 		frontShooter.setP(ShootP);
 		frontShooter.setI(ShootI);
 		frontShooter.setD(ShootD);
+		frontShooter.setF(ShootFg);
 		frontShooter.setAllowableClosedLoopErr(ShootErr);
 		frontShooter.enableBrakeMode(false);
 		
@@ -54,6 +56,7 @@ public class Shooter extends Subsystem {
 		backShooter.setP(ShootP);
 		backShooter.setI(ShootI);
 		backShooter.setD(ShootD);
+		backShooter.setF(ShootFg);
 		backShooter.setAllowableClosedLoopErr(ShootErr);
 		backShooter.enableBrakeMode(false);
 	}

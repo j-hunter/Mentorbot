@@ -13,6 +13,7 @@ import org.usfirst.frc.team342.mentorbot.subsystems.ExampleSubsystem;
 import org.usfirst.frc.team342.mentorbot.subsystems.Pickup;
 import org.usfirst.frc.team342.mentorbot.subsystems.Shooter;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
@@ -36,6 +37,7 @@ public class Robot extends IterativeRobot {
 	private Drive driveSystem;
 	public CameraPod camera;
 	public Joystick joystick;
+	DigitalInput input;
 	
     Command autonomousCommand;
     Command testCommand;
@@ -60,6 +62,7 @@ public class Robot extends IterativeRobot {
         climber = new Climb();
         pickup = new Pickup();
         oi = new OI(driveSystem, pickup, joystick);
+        input = new DigitalInput(9);
         
         chooser = new SendableChooser();
         chooser.addDefault("Empty", new ExampleCommand());
@@ -145,6 +148,11 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
+        
+        if(input.get())
+        	SmartDashboard.putString("DoorClosed", "Closed");
+        else
+        	SmartDashboard.putString("DoorClosed", "Open");
         SmartDashboard.putString("trigger", "" + joystick.getRawAxis(2));
        
     }
