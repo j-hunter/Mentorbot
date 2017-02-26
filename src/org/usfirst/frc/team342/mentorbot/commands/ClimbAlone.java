@@ -1,5 +1,6 @@
 package org.usfirst.frc.team342.mentorbot.commands;
 
+import org.usfirst.frc.team342.mentorbot.OI;
 import org.usfirst.frc.team342.mentorbot.subsystems.Climb;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -17,7 +18,7 @@ public class ClimbAlone extends Command{
 	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
-		climber.set(joystick.getRawAxis(5));
+		climber.set(joystick.getRawAxis(OI.ClimbAxis));
 		return false;
 	}
 

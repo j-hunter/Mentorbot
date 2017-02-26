@@ -684,7 +684,7 @@ public class Drive extends Subsystem {
 		if (power > 1.0)
 			power = 1.0;
 		if (slow)
-			powCurve = (Math.pow(power, 3) / 2) + 0.2;
+			powCurve = (Math.pow(power, 3) / 4);// + 0.2;
 		else
 			powCurve = Math.pow(power, 3);
 

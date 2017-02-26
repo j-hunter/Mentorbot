@@ -1,7 +1,10 @@
 package org.usfirst.frc.team342.mentorbot;
 
+import org.usfirst.frc.team342.mentorbot.commands.GearClose;
+import org.usfirst.frc.team342.mentorbot.commands.GearOpen;
 import org.usfirst.frc.team342.mentorbot.commands.RunPickup;
 import org.usfirst.frc.team342.mentorbot.subsystems.Drive;
+import org.usfirst.frc.team342.mentorbot.subsystems.Gear;
 import org.usfirst.frc.team342.mentorbot.subsystems.Pickup;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -40,10 +43,30 @@ public class OI {
     // until it is finished as determined by it's isFinished method.
     // button.whenReleased(new ExampleCommand());
 	
-	private Joystick joystick;
+	//GearControl
+	public static final int GearAxis = 1;
+	public static final int GearOveride = 4;
+	public static final int GearOpenBtn = 1;
+	public static final int GearCloseBtn = 1;
+	
+	//Climb Controll
+	public static final int ClimbAxis = 5;
+	
+	//Shooter
+	public static final int ShooterAxis = 3;
+	public static final int ShooterConvBtn = 6;
+	
+	public Joystick xbox;
+	public Joystick logitech;
 	private Pickup pickup;
+	private Gear gear;
+	
 	private Button refStart;
 	private Button revWheel;
+	
+	private Button openGear;
+	private Button closeGear;
+	
 	
 	private Button pickupBtn;
 	/* Pickup - L Bumper 5
@@ -53,18 +76,23 @@ public class OI {
 	 */
 	private static int PICKUPBTN = 5;
 	public 
-	OI(Drive drive, Pickup pick, Joystick stick){
-		joystick = stick;
+	OI(Drive drive, Pickup pick, Gear gearIn, Joystick stick1, Joystick stick2){
+		xbox = stick1;
+		logitech = stick2;
 		pickup = pick;
-		
+		gear = gearIn;
 		//refStart = new JoystickButton(joystick,RobotMap.JREFSTART);
 		//revWheel = new JoystickButton(joystick,RobotMap.JREVWHEEL);
-		pickupBtn = new JoystickButton(joystick,PICKUPBTN);
-		
+		pickupBtn = new JoystickButton(logitech,PICKUPBTN);
+		openGear = new JoystickButton(logitech, GearOpenBtn);
+		closeGear = new JoystickButton(logitech, GearCloseBtn);
 		
 		//refStart.whenPressed(new RefDrive(drive));
 		//revWheel.whenPressed(new RevWheel(drive, joystick));
 		pickupBtn.whileHeld(new RunPickup(pickup));
+		
+		openGear.whenPressed(new GearOpen(gear, 1));
+		closeGear.whenPressed(new GearClose(gear));
 	}
 }
 

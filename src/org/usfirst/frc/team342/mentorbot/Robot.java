@@ -5,11 +5,13 @@ import org.usfirst.frc.team342.mentorbot.commands.CameraAim;
 import org.usfirst.frc.team342.mentorbot.commands.ClimbAlone;
 import org.usfirst.frc.team342.mentorbot.commands.DriveWithJoystick;
 import org.usfirst.frc.team342.mentorbot.commands.ExampleCommand;
+import org.usfirst.frc.team342.mentorbot.commands.GearAlone;
 import org.usfirst.frc.team342.mentorbot.commands.ShootAlone;
 import org.usfirst.frc.team342.mentorbot.subsystems.CameraPod;
 import org.usfirst.frc.team342.mentorbot.subsystems.Climb;
 import org.usfirst.frc.team342.mentorbot.subsystems.Drive;
 import org.usfirst.frc.team342.mentorbot.subsystems.ExampleSubsystem;
+import org.usfirst.frc.team342.mentorbot.subsystems.Gear;
 import org.usfirst.frc.team342.mentorbot.subsystems.Pickup;
 import org.usfirst.frc.team342.mentorbot.subsystems.Shooter;
 
@@ -36,11 +38,15 @@ public class Robot extends IterativeRobot {
 	
 	private Drive driveSystem;
 	public CameraPod camera;
-	public Joystick joystick;
+	public Joystick xbox;
+	public Joystick logitech;
 	DigitalInput input;
 	
     Command autonomousCommand;
     Command testCommand;
+    Command gearControl;
+    private Command climbControl;
+    private Command shooterControl;
     SendableChooser chooser;
     
     CameraAim camCom;
@@ -48,6 +54,8 @@ public class Robot extends IterativeRobot {
 	private Shooter shooter;
 	private Climb climber;
 	private Pickup pickup;
+	private Gear gear;
+	
 
     /**
      * This function is run when the robot is first started up and should be
@@ -57,17 +65,22 @@ public class Robot extends IterativeRobot {
 	
         //camera = new CameraPod();
         driveSystem = new Drive();
-        joystick = new Joystick(RobotMap.JPORTNUM);
+        xbox = new Joystick(RobotMap.JPORTXBOX);
+        logitech = new Joystick(RobotMap.JPORTLOG);
         shooter = new Shooter();
         climber = new Climb();
+        gear = new Gear();
         pickup = new Pickup();
-        oi = new OI(driveSystem, pickup, joystick);
-        input = new DigitalInput(9);
+        oi = new OI(driveSystem, pickup, gear, xbox, logitech);
+        //input = new DigitalInput(9);
+        //gearControl = new GearAlone(gear, logitech);
+        climbControl = new ClimbAlone(climber, logitech);
+        shooterControl = new ShootAlone(shooter, xbox);
         
         chooser = new SendableChooser();
         chooser.addDefault("Empty", new ExampleCommand());
-        chooser.addObject("Shooter Test", new ShootAlone(shooter, joystick));
-        chooser.addObject("Climber", new ClimbAlone(climber, joystick));
+        //chooser.addObject("Shooter Test", new ShootAlone(shooter, xbox));
+        //chooser.addObject("Climber", new ClimbAlone(climber, xbox));
 //        chooser.addObject("My Auto", new MyAutoCommand());
         SmartDashboard.putData("Test Command", chooser);
         
@@ -133,11 +146,15 @@ public class Robot extends IterativeRobot {
         while(!driveSystem.refSwerve())
         	SmartDashboard.putString("teleInitRef", "Running");
         SmartDashboard.putString("teleInitRef", "Done");
-        driver = new DriveWithJoystick(driveSystem, joystick);
+        driver = new DriveWithJoystick(driveSystem, xbox);
         driver.start();
         testCommand = (Command) chooser.getSelected();
         if(testCommand != null)
         	testCommand.start();
+        
+        //gearControl.start();
+        climbControl.start();
+        shooterControl.start();
         
         
         
@@ -149,11 +166,11 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
         
-        if(input.get())
-        	SmartDashboard.putString("DoorClosed", "Closed");
-        else
-        	SmartDashboard.putString("DoorClosed", "Open");
-        SmartDashboard.putString("trigger", "" + joystick.getRawAxis(2));
+        //if(input.get())
+        //	SmartDashboard.putString("DoorClosed", "Closed");
+        //else
+        //	SmartDashboard.putString("DoorClosed", "Open");
+        SmartDashboard.putString("trigger", "" + xbox.getRawAxis(2));
        
     }
     

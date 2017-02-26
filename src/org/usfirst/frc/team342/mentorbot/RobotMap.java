@@ -36,7 +36,8 @@ public class RobotMap {
 	public static final int RLAngleAddr = 7;
 	public static final int PowRLA = 11;
 	
-	public static final int JPORTNUM = 0;
+	public static final int JPORTXBOX = 0;
+	public static final int JPORTLOG = 1;
 	//Joystick buttons
 	public static final int JREFSTART = 7;
 	public static final int JREVWHEEL = 8;
@@ -59,7 +60,9 @@ public class RobotMap {
 	public static final int PowConvey = 14;
 	
 	//Gear
+	public static final int GearAddr = 3;
 	public static final int PowGear = 6;
+	public static final int gearLim = 9;
 	
 	//Intake
 	public static final int PickupMotor = 0;
@@ -71,6 +74,9 @@ public class RobotMap {
 	
 	//PDP address
 	public static final int PDPADDR = 0;
+	
+	
+	
 	
 	
 
