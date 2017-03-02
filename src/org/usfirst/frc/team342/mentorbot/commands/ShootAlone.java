@@ -20,8 +20,8 @@ public class ShootAlone extends Command {
 	
 	public void initialize(){
 		double front, back;
-		SmartDashboard.putString(FRONT_MAX_SPEED, "" + 2000.0);
-		SmartDashboard.putString(BACK_MAX_SPEED, "" + 3000.0);
+		SmartDashboard.putString(FRONT_MAX_SPEED, "" + 1750.0);
+		SmartDashboard.putString(BACK_MAX_SPEED, "" + 2950.0);
 
 	}
 

@@ -13,7 +13,7 @@ public class GearClose extends Command {
 	}
 	@Override
 	protected void execute(){
-		gear.move(0.5);
+		gear.move(-0.5);
 	}
 	@Override
 	protected void end(){

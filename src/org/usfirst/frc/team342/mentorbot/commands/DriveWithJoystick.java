@@ -18,7 +18,7 @@ public class DriveWithJoystick extends Command {
 		double x = joystick.getRawAxis(0);
 		double y = joystick.getRawAxis(1);
 		double rot = joystick.getRawAxis(4);
-		drive.cartDrive(-y, x, rot, joystick.getRawButton(5), ! joystick.getRawButton(1));
+		drive.cartDrive(y, -x, -rot, joystick.getRawButton(5), ! joystick.getRawButton(1));
 		//drive.updateDriveData();
 	}
 	@Override

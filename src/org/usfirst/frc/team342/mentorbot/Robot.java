@@ -5,7 +5,6 @@ import org.usfirst.frc.team342.mentorbot.commands.CameraAim;
 import org.usfirst.frc.team342.mentorbot.commands.ClimbAlone;
 import org.usfirst.frc.team342.mentorbot.commands.DriveWithJoystick;
 import org.usfirst.frc.team342.mentorbot.commands.ExampleCommand;
-import org.usfirst.frc.team342.mentorbot.commands.GearAlone;
 import org.usfirst.frc.team342.mentorbot.commands.ShootAlone;
 import org.usfirst.frc.team342.mentorbot.subsystems.CameraPod;
 import org.usfirst.frc.team342.mentorbot.subsystems.Climb;
@@ -15,6 +14,10 @@ import org.usfirst.frc.team342.mentorbot.subsystems.Gear;
 import org.usfirst.frc.team342.mentorbot.subsystems.Pickup;
 import org.usfirst.frc.team342.mentorbot.subsystems.Shooter;
 
+import edu.wpi.cscore.MjpegServer;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoMode.PixelFormat;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
@@ -56,6 +59,11 @@ public class Robot extends IterativeRobot {
 	private Pickup pickup;
 	private Gear gear;
 	
+	//Temp CAm
+	private CameraServer cams;
+	private MjpegServer serv;
+	private UsbCamera cam1;
+	
 
     /**
      * This function is run when the robot is first started up and should be
@@ -83,6 +91,13 @@ public class Robot extends IterativeRobot {
         //chooser.addObject("Climber", new ClimbAlone(climber, xbox));
 //        chooser.addObject("My Auto", new MyAutoCommand());
         SmartDashboard.putData("Test Command", chooser);
+        
+        //Quick cam?
+        cam1 = new UsbCamera("cam1",0);
+        cams = CameraServer.getInstance();
+        serv = cams.addServer("Main");
+        cam1.setVideoMode(PixelFormat.kMJPEG, 640, 480, 30);
+        serv.setSource(cam1);
         
 
     }

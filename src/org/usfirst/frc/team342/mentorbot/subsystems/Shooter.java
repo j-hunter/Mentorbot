@@ -24,8 +24,8 @@ public class Shooter extends Subsystem {
 	private static final double ShootFg = 0.037;
 	private static final int ShootErr = 30;
 	
-	private double maxFrontSpeed = 1300.0; //2500.0;
-	private double maxBackSpeed = 30000; //4500.0;
+	private double maxFrontSpeed = 1750.0; //2500.0;
+	private double maxBackSpeed = 2950.0; //4500.0;
 	private double conveyorSpeed = 0.60;
 	
 	

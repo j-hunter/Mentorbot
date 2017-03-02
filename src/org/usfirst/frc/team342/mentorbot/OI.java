@@ -47,10 +47,10 @@ public class OI {
 	public static final int GearAxis = 1;
 	public static final int GearOveride = 4;
 	public static final int GearOpenBtn = 1;
-	public static final int GearCloseBtn = 1;
+	public static final int GearCloseBtn = 2;
 	
 	//Climb Controll
-	public static final int ClimbAxis = 5;
+	public static final int ClimbAxis = 1;
 	
 	//Shooter
 	public static final int ShooterAxis = 3;
@@ -91,7 +91,7 @@ public class OI {
 		//revWheel.whenPressed(new RevWheel(drive, joystick));
 		pickupBtn.whileHeld(new RunPickup(pickup));
 		
-		openGear.whenPressed(new GearOpen(gear, 1));
+		openGear.whenPressed(new GearOpen(gear, 1.2));
 		closeGear.whenPressed(new GearClose(gear));
 	}
 }

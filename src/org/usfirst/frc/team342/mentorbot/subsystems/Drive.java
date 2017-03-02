@@ -664,11 +664,12 @@ public class Drive extends Subsystem {
 		double gyroAngle;
 		double steerAngle = calcAngle(xIn, yIn) / 360.0;
 
-		if (!fieldO)
-			resetGyro();
-
-		gyroAngle = navx.getAngle();
-
+		if (!fieldO){
+		//	resetGyro();
+			gyroAngle = 0;
+		} else {
+			gyroAngle = navx.getAngle();
+		}
 		SmartDashboard.putString("gyro1", "" + gyroAngle);
 		gyroAngle = (gyroAngle % 360) / 360.0;
 		SmartDashboard.putString("gyro2", "" + gyroAngle);

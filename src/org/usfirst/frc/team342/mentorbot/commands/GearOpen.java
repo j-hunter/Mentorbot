@@ -9,19 +9,24 @@ public class GearOpen extends Command {
 	private double timeEnd;
 	private double OpenSeconds;
 	private Gear gear;
+	private boolean stopEarly;
 	
 	public GearOpen(Gear gearIn, double seconds){
 		OpenSeconds = seconds;
 		gear = gearIn;
+		stopEarly = false;
 	}
 	@Override
 	protected void initialize(){
 		timeEnd = System.currentTimeMillis() + (OpenSeconds * 1000);
+		
+		stopEarly = !gear.isClosed();
+		
 	}
 	
 	@Override
 	protected void execute(){
-		gear.move(-0.5);
+		gear.move(0.5);
 	}
 	
 	@Override
@@ -36,7 +41,7 @@ public class GearOpen extends Command {
 	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
-		return System.currentTimeMillis() > timeEnd;
+		return System.currentTimeMillis() > timeEnd || stopEarly;
 	}
 
 }
